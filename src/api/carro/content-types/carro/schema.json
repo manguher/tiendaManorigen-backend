@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "carros",
+  "info": {
+    "singularName": "carro",
+    "pluralName": "carros",
+    "displayName": "carro"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "usuario": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::usuario.usuario",
+      "inversedBy": "carros"
+    },
+    "productos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::producto.producto",
+      "inversedBy": "carros"
+    },
+    "cantidad": {
+      "type": "integer"
+    },
+    "precioTotal": {
+      "type": "integer"
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": [
+        "pendiente",
+        "completado",
+        "cancelado"
+      ]
+    }
+  }
+}
