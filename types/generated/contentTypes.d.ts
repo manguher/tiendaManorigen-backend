@@ -362,6 +362,169 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiCategoriaCategoria extends Schema.CollectionType {
+  collectionName: 'categorias';
+  info: {
+    singularName: 'categoria';
+    pluralName: 'categorias';
+    displayName: 'categoria';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    nombre: Attribute.String;
+    descripcion: Attribute.String;
+    parent_category: Attribute.Relation<
+      'api::categoria.categoria',
+      'manyToOne',
+      'api::categoria.categoria'
+    >;
+    categorias: Attribute.Relation<
+      'api::categoria.categoria',
+      'oneToMany',
+      'api::categoria.categoria'
+    >;
+    productos: Attribute.Relation<
+      'api::categoria.categoria',
+      'oneToMany',
+      'api::producto.producto'
+    >;
+    menu_items: Attribute.Relation<
+      'api::categoria.categoria',
+      'oneToMany',
+      'api::menu-item.menu-item'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::categoria.categoria',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::categoria.categoria',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMenuMenu extends Schema.CollectionType {
+  collectionName: 'menus';
+  info: {
+    singularName: 'menu';
+    pluralName: 'menus';
+    displayName: 'Menu';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    nombre: Attribute.String;
+    slug: Attribute.UID;
+    items: Attribute.Relation<
+      'api::menu.menu',
+      'oneToMany',
+      'api::menu-item.menu-item'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::menu.menu', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::menu.menu', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMenuItemMenuItem extends Schema.CollectionType {
+  collectionName: 'menu_items';
+  info: {
+    singularName: 'menu-item';
+    pluralName: 'menu-items';
+    displayName: 'Menu item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    titulo: Attribute.String;
+    slug: Attribute.UID;
+    categoria: Attribute.Relation<
+      'api::menu-item.menu-item',
+      'manyToOne',
+      'api::categoria.categoria'
+    >;
+    orden: Attribute.Integer;
+    parent_menu: Attribute.Relation<
+      'api::menu-item.menu-item',
+      'manyToOne',
+      'api::menu.menu'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::menu-item.menu-item',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::menu-item.menu-item',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiProductoProducto extends Schema.CollectionType {
+  collectionName: 'productos';
+  info: {
+    singularName: 'producto';
+    pluralName: 'productos';
+    displayName: 'producto';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    nombre: Attribute.String;
+    descripcion: Attribute.String;
+    precio: Attribute.Decimal;
+    stock: Attribute.Integer;
+    imagenes: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
+    categoria: Attribute.Relation<
+      'api::producto.producto',
+      'manyToOne',
+      'api::categoria.categoria'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::producto.producto',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::producto.producto',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -590,6 +753,53 @@ export interface PluginContentReleasesReleaseAction
   };
 }
 
+export interface PluginI18NLocale extends Schema.CollectionType {
+  collectionName: 'i18n_locale';
+  info: {
+    singularName: 'locale';
+    pluralName: 'locales';
+    collectionName: 'locales';
+    displayName: 'Locale';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: Attribute.String &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+          max: 50;
+        },
+        number
+      >;
+    code: Attribute.String & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUsersPermissionsPermission
   extends Schema.CollectionType {
   collectionName: 'up_permissions';
@@ -741,392 +951,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface PluginI18NLocale extends Schema.CollectionType {
-  collectionName: 'i18n_locale';
-  info: {
-    singularName: 'locale';
-    pluralName: 'locales';
-    collectionName: 'locales';
-    displayName: 'Locale';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    name: Attribute.String &
-      Attribute.SetMinMax<
-        {
-          min: 1;
-          max: 50;
-        },
-        number
-      >;
-    code: Attribute.String & Attribute.Unique;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'plugin::i18n.locale',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'plugin::i18n.locale',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCarroCarro extends Schema.CollectionType {
-  collectionName: 'carros';
-  info: {
-    singularName: 'carro';
-    pluralName: 'carros';
-    displayName: 'carro';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    usuario: Attribute.Relation<
-      'api::carro.carro',
-      'manyToOne',
-      'api::usuario.usuario'
-    >;
-    productos: Attribute.Relation<
-      'api::carro.carro',
-      'manyToMany',
-      'api::producto.producto'
-    >;
-    cantidad: Attribute.Integer;
-    precioTotal: Attribute.Integer;
-    estado: Attribute.Enumeration<['pendiente', 'completado', 'cancelado']>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::carro.carro',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::carro.carro',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCategoriaCategoria extends Schema.CollectionType {
-  collectionName: 'categorias';
-  info: {
-    singularName: 'categoria';
-    pluralName: 'categorias';
-    displayName: 'categoria';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    nombre: Attribute.String;
-    descripcion: Attribute.String;
-    parent_category: Attribute.Relation<
-      'api::categoria.categoria',
-      'manyToOne',
-      'api::categoria.categoria'
-    >;
-    categorias: Attribute.Relation<
-      'api::categoria.categoria',
-      'oneToMany',
-      'api::categoria.categoria'
-    >;
-    productos: Attribute.Relation<
-      'api::categoria.categoria',
-      'oneToMany',
-      'api::producto.producto'
-    >;
-    menu_items: Attribute.Relation<
-      'api::categoria.categoria',
-      'oneToMany',
-      'api::menu-item.menu-item'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::categoria.categoria',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::categoria.categoria',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiDireccionDireccion extends Schema.CollectionType {
-  collectionName: 'direccions';
-  info: {
-    singularName: 'direccion';
-    pluralName: 'direccions';
-    displayName: 'direccion';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    calle: Attribute.String;
-    ciudad: Attribute.String;
-    comuna: Attribute.String;
-    region: Attribute.String;
-    referencia: Attribute.String;
-    codigoPostal: Attribute.String;
-    usuario: Attribute.Relation<
-      'api::direccion.direccion',
-      'oneToOne',
-      'api::usuario.usuario'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::direccion.direccion',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::direccion.direccion',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiMenuMenu extends Schema.CollectionType {
-  collectionName: 'menus';
-  info: {
-    singularName: 'menu';
-    pluralName: 'menus';
-    displayName: 'Menu';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    nombre: Attribute.String;
-    slug: Attribute.UID;
-    items: Attribute.Relation<
-      'api::menu.menu',
-      'oneToMany',
-      'api::menu-item.menu-item'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::menu.menu', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::menu.menu', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiMenuItemMenuItem extends Schema.CollectionType {
-  collectionName: 'menu_items';
-  info: {
-    singularName: 'menu-item';
-    pluralName: 'menu-items';
-    displayName: 'Menu item';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    titulo: Attribute.String;
-    slug: Attribute.UID;
-    categoria: Attribute.Relation<
-      'api::menu-item.menu-item',
-      'manyToOne',
-      'api::categoria.categoria'
-    >;
-    orden: Attribute.Integer;
-    parent_menu: Attribute.Relation<
-      'api::menu-item.menu-item',
-      'manyToOne',
-      'api::menu.menu'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::menu-item.menu-item',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::menu-item.menu-item',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPedidoPedido extends Schema.CollectionType {
-  collectionName: 'pedidos';
-  info: {
-    singularName: 'pedido';
-    pluralName: 'pedidos';
-    displayName: 'pedido';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    fecha_pedido: Attribute.Date;
-    total: Attribute.Decimal;
-    estado: Attribute.String;
-    opcion_personalizada: Attribute.JSON;
-    productos: Attribute.Relation<
-      'api::pedido.pedido',
-      'manyToMany',
-      'api::producto.producto'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::pedido.pedido',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::pedido.pedido',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiProductoProducto extends Schema.CollectionType {
-  collectionName: 'productos';
-  info: {
-    singularName: 'producto';
-    pluralName: 'productos';
-    displayName: 'producto';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    nombre: Attribute.String;
-    descripcion: Attribute.String;
-    precio: Attribute.Decimal;
-    stock: Attribute.Integer;
-    imagenes: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
-    pedidos: Attribute.Relation<
-      'api::producto.producto',
-      'manyToMany',
-      'api::pedido.pedido'
-    >;
-    carros: Attribute.Relation<
-      'api::producto.producto',
-      'manyToMany',
-      'api::carro.carro'
-    >;
-    categoria: Attribute.Relation<
-      'api::producto.producto',
-      'manyToOne',
-      'api::categoria.categoria'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::producto.producto',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::producto.producto',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiUsuarioUsuario extends Schema.CollectionType {
-  collectionName: 'usuarios';
-  info: {
-    singularName: 'usuario';
-    pluralName: 'usuarios';
-    displayName: 'usuario';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    nombre: Attribute.String;
-    apellido_materno: Attribute.String;
-    apellido_paterno: Attribute.String;
-    rut: Attribute.String;
-    email: Attribute.String;
-    telefono: Attribute.String;
-    direccion_id: Attribute.Relation<
-      'api::usuario.usuario',
-      'oneToOne',
-      'api::direccion.direccion'
-    >;
-    carros: Attribute.Relation<
-      'api::usuario.usuario',
-      'oneToMany',
-      'api::carro.carro'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::usuario.usuario',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::usuario.usuario',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1137,22 +961,18 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::categoria.categoria': ApiCategoriaCategoria;
+      'api::menu.menu': ApiMenuMenu;
+      'api::menu-item.menu-item': ApiMenuItemMenuItem;
+      'api::producto.producto': ApiProductoProducto;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
+      'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'plugin::i18n.locale': PluginI18NLocale;
-      'api::carro.carro': ApiCarroCarro;
-      'api::categoria.categoria': ApiCategoriaCategoria;
-      'api::direccion.direccion': ApiDireccionDireccion;
-      'api::menu.menu': ApiMenuMenu;
-      'api::menu-item.menu-item': ApiMenuItemMenuItem;
-      'api::pedido.pedido': ApiPedidoPedido;
-      'api::producto.producto': ApiProductoProducto;
-      'api::usuario.usuario': ApiUsuarioUsuario;
     }
   }
 }

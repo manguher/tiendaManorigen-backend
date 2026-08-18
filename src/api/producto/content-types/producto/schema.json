@@ -35,18 +35,6 @@
         "audios"
       ]
     },
-    "pedidos": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::pedido.pedido",
-      "mappedBy": "productos"
-    },
-    "carros": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::carro.carro",
-      "mappedBy": "productos"
-    },
     "categoria": {
       "type": "relation",
       "relation": "manyToOne",
